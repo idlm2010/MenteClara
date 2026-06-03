@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#f5f0e8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Mente Clara</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:          #f7f3ec;
+  --bg2:         #ede8de;
+  --surface:     #faf7f2;
+  --surface2:    #e8e2d6;
+  --ink:         #2d2a25;
+  --ink2:        #5c5850;
+  --ink3:        #9a9389;
+  --line:        rgba(45,42,37,0.10);
+  --line2:       rgba(45,42,37,0.18);
+  --sage:        #6b8f71;
+  --sage-light:  #eaf1eb;
+  --sage-mid:    #c4d9c6;
+  --sage-dark:   #3d5e42;
+  --amber:       #b07d3a;
+  --amber-bg:    #fdf3e3;
+  --amber-line:  rgba(176,125,58,0.25);
+  --sky:         #4a7fa5;
+  --sky-bg:      #e8f2f9;
+  --sky-line:    rgba(74,127,165,0.25);
+  --rose:        #a05c6a;
+  --rose-bg:     #faeef0;
+  --rose-line:   rgba(160,92,106,0.25);
+  --teal:        #3d8a7a;
+  --teal-bg:     #e5f4f1;
+  --teal-line:   rgba(61,138,122,0.25);
+  --purple:      #7060a0;
+  --purple-bg:   #f0edf8;
+  --purple-line: rgba(112,96,160,0.25);
+  --r:    18px;
+  --rsm:  12px;
+  --rxs:  8px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body {
+  background: var(--bg); color: var(--ink);
+  font-family: 'Nunito', sans-serif; font-size: 16px; line-height: 1.6;
+  min-height: 100dvh; overflow-x: hidden; -webkit-font-smoothing: antialiased;
+}
+.screen { display: none; min-height: 100dvh; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* HEADER */
+.hdr {
+  background: var(--surface); border-bottom: 1px solid var(--line);
+  padding: 13px 18px; display: flex; align-items: center; gap: 12px;
+  position: sticky; top: 0; z-index: 20;
+}
+.back {
+  background: var(--bg2); border: 1px solid var(--line2);
+  border-radius: 50%; width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink2); font-size: 18px; cursor: pointer; flex-shrink: 0;
+  transition: background .15s;
+}
+.back:active { background: var(--surface2); }
+.htitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 500; color: var(--ink);
+}
+
+/* HOME */
+.hero {
+  background: var(--surface); border-bottom: 1px solid var(--line);
+  padding: 52px 24px 30px; text-align: center; position: relative; overflow: hidden;
+}
+.hero::before {
+  content:''; position: absolute; top:0; left:0; right:0; height:3px;
+  background: linear-gradient(90deg, var(--sage-mid), var(--sky-bg), var(--teal-bg), var(--rose-bg));
+}
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 42px; font-weight: 300; font-style: italic;
+  color: var(--sage-dark); letter-spacing: 0.5px; margin-bottom: 5px;
+}
+.tagline { font-size: 12px; color: var(--ink3); letter-spacing: 0.5px; }
+
+.hbody { padding: 20px 20px; flex: 1; }
+
+.slabel {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 12px;
+}
+
+/* BUTTONS */
+.bp {
+  display: block; width: 100%; background: var(--sage); color: #fff;
+  border: none; border-radius: var(--rsm); padding: 15px;
+  font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 600;
+  cursor: pointer; text-align: center; letter-spacing: .3px;
+  transition: background .15s, transform .1s;
+  box-shadow: 0 2px 10px rgba(107,143,113,.22);
+}
+.bp:active { background: var(--sage-dark); transform: scale(.98); }
+
+/* EMOTION LIST */
+.elist { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.eitem {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r); padding: 13px 15px;
+  cursor: pointer; display: flex; align-items: center; gap: 11px;
+  transition: border-color .15s, transform .1s;
+}
+.eitem:active { transform: scale(.99); border-color: var(--line2); }
+.epip { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ebody { flex: 1; min-width: 0; }
+.etitle { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.emeta { font-size: 12px; color: var(--ink3); }
+.echev { color: var(--ink3); font-size: 18px; flex-shrink: 0; }
+
+.empty { text-align: center; padding: 50px 20px; color: var(--ink3); }
+.eglyph { font-family: 'Cormorant Garamond', serif; font-size: 60px; font-weight: 300; font-style: italic; color: var(--sage-mid); margin-bottom: 12px; line-height: 1; }
+.etxt   { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--ink2); margin-bottom: 6px; }
+.esub   { font-size: 14px; line-height: 1.6; }
+
+/* FORM */
+.fbody { padding: 20px; flex: 1; display: flex; flex-direction: column; gap: 17px; overflow-y: auto; }
+.flabel { font-size: 12px; font-weight: 600; letter-spacing: .4px; color: var(--ink2); margin-bottom: 6px; }
+.fi, .ft, .fs {
+  background: var(--surface); border: 1px solid var(--line2);
+  border-radius: var(--rxs); color: var(--ink);
+  font-family: 'Nunito', sans-serif; font-size: 15px; padding: 12px 14px;
+  width: 100%; outline: none; transition: border-color .15s;
+  -webkit-appearance: none; appearance: none;
+}
+.fi:focus, .ft:focus { border-color: var(--sage); }
+.ft { resize: none; min-height: 85px; line-height: 1.6; }
+.tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag {
+  background: var(--surface); border: 1px solid var(--line2);
+  border-radius: 20px; color: var(--ink2);
+  font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 500;
+  padding: 7px 13px; cursor: pointer; transition: all .1s;
+}
+.tag.on { background: var(--sage-light); border-color: var(--sage); color: var(--sage-dark); }
+.irow { display: flex; gap: 4px; }
+.ib {
+  flex: 1; background: var(--surface); border: 1px solid var(--line2);
+  border-radius: 6px; color: var(--ink3);
+  font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 500;
+  padding: 9px 2px; cursor: pointer; text-align: center; transition: all .1s;
+}
+.ib.on { background: var(--sage-light); border-color: var(--sage); color: var(--sage-dark); font-weight: 700; }
+
+/* DETAIL */
+.dband { background: var(--surface); border-bottom: 1px solid var(--line); padding: 17px 20px 20px; }
+.dname { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 400; font-style: italic; color: var(--ink); margin-bottom: 3px; line-height: 1.2; }
+.dmeta { font-size: 12px; color: var(--ink3); margin-bottom: 11px; }
+.chip  { display: inline-flex; align-items: center; gap: 5px; background: var(--sage-light); border: 1px solid var(--sage-mid); border-radius: 20px; padding: 4px 10px; font-size: 12px; font-weight: 600; color: var(--sage-dark); }
+.dthought { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 400; font-style: italic; color: var(--ink2); line-height: 1.5; border-left: 2px solid var(--sage-mid); padding-left: 14px; margin-top: 13px; }
+.dfear { font-size: 13px; color: var(--ink3); margin-top: 7px; padding-left: 14px; }
+.carea { padding: 18px 20px; }
+
+/* CARDS ON DETAIL */
+.scard {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r); padding: 15px;
+  margin-bottom: 9px; cursor: pointer;
+  display: flex; align-items: center; gap: 13px;
+  transition: border-color .15s, transform .1s;
+}
+.scard:active { transform: scale(.99); }
+.sicon { width: 42px; height: 42px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.stitle { font-weight: 600; font-size: 15px; }
+.ssub   { font-size: 12px; color: var(--ink3); margin-top: 2px; }
+.cgrid  { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 9px; }
+.cc {
+  border-radius: var(--r); padding: 15px 13px;
+  cursor: pointer; border: 1px solid transparent; transition: transform .1s;
+}
+.cc:active { transform: scale(.97); }
+.camber { background: var(--amber-bg); border-color: var(--amber-line); }
+.csky   { background: var(--sky-bg);   border-color: var(--sky-line); }
+.crose  { background: var(--rose-bg);  border-color: var(--rose-line); }
+.cteal  { background: var(--teal-bg);  border-color: var(--teal-line); }
+.cci { font-size: 22px; margin-bottom: 7px; }
+.cct { font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+.ccn { font-size: 11px; }
+.camber .cct { color: var(--amber); } .camber .ccn { color: rgba(176,125,58,.55); }
+.csky   .cct { color: var(--sky); }   .csky   .ccn { color: rgba(74,127,165,.55); }
+.crose  .cct { color: var(--rose); }  .crose  .ccn { color: rgba(160,92,106,.55); }
+.cteal  .cct { color: var(--teal); }  .cteal  .ccn { color: rgba(61,138,122,.55); }
+.delb { background: transparent; border: 1px solid rgba(160,60,60,.18); color: #a03030; border-radius: var(--rsm); padding: 11px; font-family: 'Nunito', sans-serif; font-size: 13px; cursor: pointer; width: 100%; margin-top: 9px; transition: background .15s; }
+.delb:active { background: rgba(160,60,60,.06); }
+.editb { background: var(--bg2); border: 1px solid var(--line2); color: var(--ink2); border-radius: var(--rsm); padding: 11px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; width: 100%; margin-top: 9px; transition: background .15s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.editb:active { background: var(--surface2); }
+.div { height: 1px; background: var(--line); margin: 16px 0; }
+
+/* CARD PLAYER */
+#screen-cards { background: var(--bg); }
+.cplayer { flex:1; display:flex; flex-direction:column; padding:15px 20px 28px; gap:16px; }
+.pbar { display:flex; gap:3px; }
+.pseg { flex:1; height:3px; border-radius:2px; background:var(--surface2); transition:background .3s; }
+.pseg.done { background:var(--sage); }
+.pseg.cur  { background:var(--sage-mid); }
+.cport { flex:1; display:flex; flex-direction:column; justify-content:center; }
+.fwrap { perspective:1200px; height:290px; cursor:pointer; }
+.finn { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform .55s cubic-bezier(.4,0,.2,1); }
+.finn.flipped { transform:rotateY(180deg); }
+.cface {
+  position:absolute; width:100%; height:100%; border-radius:var(--r);
+  backface-visibility:hidden; -webkit-backface-visibility:hidden;
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  padding:26px 22px; text-align:center; border:1px solid var(--line);
+}
+.cback { transform:rotateY(180deg); background:var(--surface); border-color:var(--line2); }
+.f-inicial     { background:var(--surface);     border-color:var(--line2); }
+.f-precriterios{ background:var(--purple-bg);   border-color:var(--purple-line); }
+.f-objetividad { background:var(--amber-bg);    border-color:var(--amber-line); }
+.f-intensidad  { background:var(--sky-bg);      border-color:var(--sky-line); }
+.f-formal      { background:var(--rose-bg);     border-color:var(--rose-line); }
+.f-utilidad    { background:var(--teal-bg);     border-color:var(--teal-line); }
+.f-final       { background:var(--sage-light);  border-color:var(--sage-mid); }
+.clbl { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:16px; opacity:.65; }
+.cq   { font-family:'Cormorant Garamond',serif; font-size:23px; font-weight:400; line-height:1.35; }
+.chnt { margin-top:18px; font-size:11px; opacity:.35; letter-spacing:.5px; }
+.f-inicial      .clbl, .f-inicial      .cq { color:var(--ink); }
+.f-precriterios .clbl, .f-precriterios .cq { color:var(--purple); }
+.f-objetividad  .clbl, .f-objetividad  .cq { color:var(--amber); }
+.f-intensidad   .clbl, .f-intensidad   .cq { color:var(--sky); }
+.f-formal       .clbl, .f-formal       .cq { color:var(--rose); }
+.f-utilidad     .clbl, .f-utilidad     .cq { color:var(--teal); }
+.f-final        .clbl, .f-final        .cq { color:var(--sage-dark); }
+.cback .clbl { color:var(--ink3); }
+.cback .cq   { font-size:17px; font-style:italic; color:var(--ink2); font-family:'Cormorant Garamond',serif; }
+.cctr { text-align:center; font-size:12px; color:var(--ink3); margin-top:7px; }
+
+/* NOTES */
+.npanel { background:var(--surface); border:1px solid var(--line); border-radius:var(--r); overflow:hidden; }
+.nhdr { padding:11px 15px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px; }
+.nlbl { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink3); flex:1; }
+.nsave {
+  background:var(--sage-light); border:1px solid var(--sage-mid);
+  color:var(--sage-dark); border-radius:6px; padding:5px 12px;
+  font-family:'Nunito',sans-serif; font-size:12px; font-weight:600;
+  cursor:pointer; transition:all .15s;
+}
+.nsave:active { background:var(--sage-mid); }
+.nsave.saved  { background:var(--sage); color:#fff; border-color:var(--sage); }
+.nta {
+  width:100%; background:transparent; border:none; outline:none; resize:none;
+  color:var(--ink); font-family:'Nunito',sans-serif; font-size:14px;
+  line-height:1.7; padding:13px 15px; min-height:80px;
+}
+.nta::placeholder { color:var(--ink3); font-style:italic; }
+
+/* NAV */
+.cnav { display:flex; align-items:center; gap:9px; }
+.narr {
+  width:46px; height:46px; background:var(--surface); border:1px solid var(--line2);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:19px; color:var(--ink2); cursor:pointer; flex-shrink:0;
+  transition:all .1s; -webkit-appearance:none; appearance:none;
+}
+.narr:active { background:var(--bg2); transform:scale(.95); }
+.narr:disabled { opacity:.3; pointer-events:none; }
+.nflip {
+  flex:1; background:var(--surface); border:1px solid var(--line2);
+  border-radius:var(--rsm); padding:12px; color:var(--ink2);
+  font-family:'Nunito',sans-serif; font-size:14px; font-weight:500;
+  cursor:pointer; text-align:center; transition:background .1s;
+  -webkit-appearance:none; appearance:none;
+}
+.nflip:active { background:var(--bg2); }
+
+/* OVERLAY */
+.ovl { position:fixed; inset:0; background:rgba(45,42,37,.45); display:none; align-items:flex-end; z-index:100; }
+.ovl.open { display:flex; }
+.sht { background:var(--surface); border-radius:24px 24px 0 0; padding:0 0 40px; width:100%; max-height:88dvh; overflow-y:auto; animation:up .25s ease-out; }
+@keyframes up { from{transform:translateY(50px);opacity:0} to{transform:translateY(0);opacity:1} }
+.shdl { width:36px; height:4px; background:var(--line2); border-radius:2px; margin:13px auto 18px; }
+.shtit { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:400; font-style:italic; padding:0 22px; margin-bottom:14px; }
+.shbod { padding:0 22px; font-size:15px; line-height:1.75; color:var(--ink2); }
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="screen-home" class="screen active">
+  <div class="hero">
+    <div class="logo">Mente Clara</div>
+    <div class="tagline">Cuestionamiento cognitivo · Terapia de pensamientos</div>
+  </div>
+  <div class="hbody">
+    <div style="margin-bottom:20px">
+      <button class="bp" onclick="goForm()">+ &nbsp;Registrar nueva emoción</button>
+    </div>
+    <div class="slabel">Registros</div>
+    <div id="elist" class="elist"></div>
+    <div id="empty" class="empty" style="display:none">
+      <div class="eglyph">✦</div>
+      <div class="etxt">Sin registros todavía</div>
+      <div class="esub">Registra una emoción o pensamiento<br>que esté causando malestar.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div id="screen-form" class="screen">
+  <div class="hdr">
+    <button class="back" id="form-back">←</button>
+    <div class="htitle" id="form-title">Registrar emoción</div>
+  </div>
+  <div class="fbody">
+    <div><div class="flabel">Fecha y hora</div><input type="datetime-local" id="f-date" class="fi"></div>
+    <div><div class="flabel">Lugar / contexto</div><input type="text" id="f-place" class="fi" placeholder="Ej: en casa, en el trabajo…"></div>
+    <div>
+      <div class="flabel">Tipo de emoción</div>
+      <div class="tags" id="etags">
+        <button class="tag" data-tag="ansiedad" onclick="toggleTag(this)">Ansiedad</button>
+        <button class="tag" data-tag="miedo" onclick="toggleTag(this)">Miedo</button>
+        <button class="tag" data-tag="tristeza" onclick="toggleTag(this)">Tristeza</button>
+        <button class="tag" data-tag="enfado" onclick="toggleTag(this)">Enfado</button>
+        <button class="tag" data-tag="culpa" onclick="toggleTag(this)">Culpa</button>
+        <button class="tag" data-tag="vergüenza" onclick="toggleTag(this)">Vergüenza</button>
+        <button class="tag" data-tag="preocupación" onclick="toggleTag(this)">Preocupación</button>
+        <button class="tag" data-tag="frustración" onclick="toggleTag(this)">Frustración</button>
+      </div>
+    </div>
+    <div><div class="flabel">Pensamiento o situación</div><textarea id="f-thought" class="ft" placeholder="Describe el pensamiento que genera malestar…"></textarea></div>
+    <div>
+      <div class="flabel">Intensidad inicial (0 = ninguna · 10 = máxima)</div>
+      <div class="irow" id="irow"></div>
+    </div>
+    <div><div class="flabel">¿Qué temías que pasara?</div><textarea id="f-fear" class="ft" placeholder="Lo peor que imaginabas…" style="min-height:65px"></textarea></div>
+    <div><div class="flabel">¿Dónde notas la emoción en el cuerpo?</div><input type="text" id="f-body" class="fi" placeholder="Ej: tensión en el pecho, nudo en el estómago…"></div>
+    <div style="padding-top:6px"><button class="bp" id="form-save-btn" onclick="saveEmotion()">Guardar y trabajar la emoción</button></div>
+    <div style="height:40px"></div>
+  </div>
+</div>
+
+<!-- DETAIL -->
+<div id="screen-detail" class="screen">
+  <div class="hdr">
+    <button class="back" onclick="go('screen-home')">←</button>
+    <div class="htitle" id="dhdr">Emoción</div>
+  </div>
+  <div id="dband" class="dband"></div>
+  <div class="carea">
+    <div class="slabel" style="margin-bottom:13px">Flujo de trabajo</div>
+    <div class="scard" onclick="openCards('inicial')">
+      <div class="sicon" style="background:var(--bg2)">🧪</div>
+      <div><div class="stitle">Tarjeta inicial</div><div class="ssub">El método científico · Los 4 criterios</div></div>
+    </div>
+    <div class="scard" onclick="openCards('precriterios')" style="background:var(--purple-bg);border-color:var(--purple-line)">
+      <div class="sicon" style="background:rgba(112,96,160,.15)">💡</div>
+      <div><div class="stitle" style="color:var(--purple)">Tarjeta precriterios</div><div class="ssub">2 premisas clave antes de comenzar</div></div>
+    </div>
+    <div class="div"></div>
+    <div class="slabel" style="margin-bottom:13px">Los 4 criterios</div>
+    <div class="cgrid">
+      <div class="cc camber" onclick="openCards('objetividad')"><div class="cci">🔍</div><div class="cct">Objetividad</div><div class="ccn">18 preguntas</div></div>
+      <div class="cc csky"   onclick="openCards('intensidad')"> <div class="cci">⚡</div><div class="cct">Intensidad</div> <div class="ccn">11 preguntas</div></div>
+      <div class="cc crose"  onclick="openCards('formal')">    <div class="cci">🗣️</div><div class="cct">Formal</div>     <div class="ccn">12 preguntas</div></div>
+      <div class="cc cteal"  onclick="openCards('utilidad')">  <div class="cci">🎯</div><div class="cct">Utilidad</div>  <div class="ccn">14 preguntas</div></div>
+    </div>
+    <div class="scard" onclick="openCards('final')" style="background:var(--sage-light);border-color:var(--sage-mid)">
+      <div class="sicon" style="background:var(--sage-mid)">✨</div>
+      <div><div class="stitle" style="color:var(--sage-dark)">Tarjeta final</div><div class="ssub">Los 5 pasos clave · Nueva interpretación</div></div>
+    </div>
+    <button class="editb" onclick="goEditForm()">✏ &nbsp;Editar este registro</button>
+    <button class="delb" onclick="confirmDelete()">Eliminar este registro</button>
+    <div style="height:40px"></div>
+  </div>
+</div>
+
+<!-- CARD PLAYER -->
+<div id="screen-cards" class="screen">
+  <div class="hdr">
+    <button class="back" id="cback">←</button>
+    <div class="htitle" id="chdr">Tarjetas</div>
+  </div>
+  <div class="cplayer">
+    <div class="pbar" id="pbar"></div>
+    <div class="cport">
+      <div class="fwrap" id="fwrap" onclick="flipCard()">
+        <div class="finn" id="finn">
+          <div class="cface" id="cfront">
+            <div class="clbl" id="clbl"></div>
+            <div class="cq"   id="cq"></div>
+            <div class="chnt">Toca para reflexionar</div>
+          </div>
+          <div class="cface cback">
+            <div class="clbl">Reflexión</div>
+            <div class="cq" id="crefl"></div>
+          </div>
+        </div>
+      </div>
+      <div class="cctr" id="cctr"></div>
+    </div>
+
+    <!-- Notes -->
+    <div class="npanel">
+      <div class="nhdr">
+        <div class="nlbl">✏ Mi reflexión personal</div>
+        <button class="nsave" id="nsave" onclick="saveNote()">Guardar</button>
+      </div>
+      <textarea class="nta" id="nta" placeholder="Escribe aquí tus pensamientos sobre esta pregunta…" oninput="onNoteInput()"></textarea>
+    </div>
+
+    <div class="cnav">
+      <button class="narr" id="bprev" onclick="prevCard()">←</button>
+      <button class="nflip" onclick="flipCard()">Girar tarjeta</button>
+      <button class="narr" id="bnext" onclick="nextCard()">→</button>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY -->
+<div id="ovl" class="ovl" onclick="closeOvl(event)">
+  <div class="sht">
+    <div class="shdl"></div>
+    <div class="shtit" id="shtit"></div>
+    <div class="shbod" id="shbod"></div>
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<script>
+const CARDS={
+  inicial:{label:'Tarjeta inicial',type:'inicial',cards:[
+    {q:'Actúa como un científico',r:'Toma tus pensamientos como hipótesis que poner a prueba, no como verdades absolutas.'},
+    {q:'OBJETIVIDAD · ¿Qué tan objetivo es este pensamiento? Busca pruebas y datos reales.',r:'¿Hay evidencia que apoye o contradiga este pensamiento?'},
+    {q:'INTENSIDAD · Si las emociones son muy intensas, puede ser señal de pensamiento irracional.',r:'Observa tu nivel de activación emocional.'},
+    {q:'UTILIDAD · ¿Te sirve este pensamiento para alcanzar tus metas?',r:'Si boicotea tus objetivos, es inadecuado.'},
+    {q:'FORMAL · ¿Qué tipo de lenguaje usas? El lenguaje absolutista causa malestar.',r:'Cambia "siempre", "nunca", "debería" por expresiones más flexibles.'}
+  ]},
+  precriterios:{label:'Precriterios',type:'precriterios',cards:[
+    {q:'Cualquier pensamiento puede ser cambiado.',r:'Por muy arraigado que parezca, los pensamientos no son permanentes.'},
+    {q:'Creer mucho en un pensamiento no garantiza que sea cierto.',r:'La intensidad de la creencia no es evidencia de su veracidad.'}
+  ]},
+  objetividad:{label:'Objetividad',type:'objetividad',cards:[
+    {q:'¿Por qué no debería pensar / hacer esto?',r:'Examina las razones reales que tienes.'},
+    {q:'¿Cuánta probabilidad objetiva hay de que pase?',r:'Intenta poner un porcentaje real, no emocional.'},
+    {q:'Aunque este pensamiento fuera verdad, ¿qué es lo peor que podría pasar? ¿Es tan malo?',r:'La catástrofe imaginada suele ser mayor que la real.'},
+    {q:'¿Me ha pasado antes? ¿Cuántas veces en cuánto tiempo?',r:'La frecuencia real suele ser menor de lo que percibimos.'},
+    {q:'¿Cuántas veces tuve ese pensamiento y al final no ocurrió lo que temía?',r:'El historial de falsas alarmas es evidencia poderosa.'},
+    {q:'Si otra persona tuviera este pensamiento, ¿qué le diría?',r:'El distanciamiento permite ver con más claridad.'},
+    {q:'¿Cómo lo interpretarían otras personas?',r:'Busca perspectivas distintas a la tuya.'},
+    {q:'¿Podría demostrarse que mi visión es mejor que la de otra persona?',r:'Tu interpretación no es la única posible.'},
+    {q:'Además de esta explicación, ¿qué otra explicación habría?',r:'Amplía el rango de posibles interpretaciones.'},
+    {q:'¿Puedes encontrar algún dato en contra de ese pensamiento?',r:'Busca activamente la evidencia contraria.'},
+    {q:'¿En otras ocasiones que pensaste lo mismo, se demostró que era cierto?',r:'El pasado es el mejor predictor.'},
+    {q:'¿Qué dicen otras personas de tu interpretación?',r:'Contrasta tu visión con fuentes externas.'},
+    {q:'¿Qué pruebas tenemos para pensar así?',r:'¿Qué evidencia real tienes? Diferencia datos de suposiciones.'},
+    {q:'¿Qué datos tenemos de que este pensamiento es cierto?',r:'Diferencia datos de suposiciones.'},
+    {q:'¿En qué te basas para pensar de ese modo?',r:'Identifica el origen del pensamiento.'},
+    {q:'¿Hay alguna lógica en ese pensamiento?',r:'Evalúa la coherencia interna.'},
+    {q:'¿Todo el mundo en esa situación tiene el mismo pensamiento que tú?',r:'Si no es universal, es una interpretación personal, no un hecho.'},
+    {q:'¿Si no estuvieras con esta emoción tan intensa, lo verías de otra forma?',r:'Las emociones fuertes distorsionan nuestra percepción.'}
+  ]},
+  intensidad:{label:'Intensidad',type:'intensidad',cards:[
+    {q:'¿Te definirías como bajo control o fuera de control?',r:'Observa tu nivel de regulación emocional.'},
+    {q:'¿Pensar así te permite elegir tu reacción?',r:'El pensamiento irracional priva la capacidad de elección.'},
+    {q:'¿Qué expresa tu cara en estos momentos?',r:'El cuerpo no miente. Observa tus expresiones.'},
+    {q:'Quedarte en ese pensamiento, ¿hace que descuides lo que te rodea?',r:'La absorción cognitiva es señal de alta intensidad.'},
+    {q:'Cuando piensas eso, ¿te cuesta concentrarte?',r:'La dificultad para concentrarse indica interferencia emocional.'},
+    {q:'Desde que tienes ese pensamiento, del 0 al 100, ¿cuánto ha empeorado tu vida?',r:'Pon un número real. Suele ser menor de lo que sentimos.'},
+    {q:'¿Qué sensaciones corporales sientes cuando te quedas en ese pensamiento?',r:'Localiza las sensaciones en tu cuerpo. ¿Dónde se manifiestan?'},
+    {q:'¿Cómo de tenso notas tu cuerpo cuando te quedas en ese pensamiento?',r:'La tensión corporal refleja la intensidad emocional.'},
+    {q:'Quedarte en ese pensamiento, ¿te desestabiliza?',r:'Si te desequilibra, es una señal importante.'},
+    {q:'Pensar así, ¿cómo te hace sentir?',r:'Nombra la emoción con precisión.'},
+    {q:'¿Qué emociones sientes? Del 0 al 100, ¿cómo de intensa es la emoción?',r:'Cuantificar ayuda a objetivar la intensidad real.'}
+  ]},
+  formal:{label:'Criterio Formal',type:'formal',cards:[
+    {q:'¿Qué términos utilizas en esos pensamientos?',r:'El vocabulario que usamos moldea nuestra realidad.'},
+    {q:'¿Qué palabras aparecen en tu mente? ¿Cómo las definirías?',r:'Define exactamente qué significan esas palabras para ti.'},
+    {q:'¿Aparecen palabras que te juzgan a ti o a otras personas?',r:'Los juicios categóricos son fuente de malestar.'},
+    {q:'¿Aparecen expresiones de venganza o castigo?',r:'Estas expresiones alimentan el resentimiento y el sufrimiento.'},
+    {q:'¿Aparecen expresiones críticas que machacan?',r:'El autodesprecio repetido es un patrón que se puede cambiar.'},
+    {q:'¿Cómo te hacen sentir las expresiones que utilizas en ese pensamiento?',r:'Las palabras tienen poder emocional directo.'},
+    {q:'¿Cómo te tratas cuando tienes ese pensamiento?',r:'¿Te hablarías así a alguien que quieres?'},
+    {q:'¿Aparecen expresiones absolutas como siempre, todo, nunca?',r:'El pensamiento todo-o-nada distorsiona la realidad.'},
+    {q:'¿Aparecen términos imperativos morales como debería, tendría…?',r:'Los "debería" son fuente clásica de ansiedad y culpa.'},
+    {q:'¿Aparecen expresiones de incapacidad?',r:'"No puedo", "soy incapaz"… ¿qué pruebas tienes de ello?'},
+    {q:'¿Aparecen expresiones negativas sobre el mundo, sobre ti o sobre tu futuro?',r:'La tríada cognitiva negativa es el núcleo de muchas depresiones.'},
+    {q:'Cuando no tengo ese pensamiento, ¿también utilizo esas expresiones?',r:'Si solo aparecen en momentos difíciles, son síntoma, no realidad.'}
+  ]},
+  utilidad:{label:'Utilidad',type:'utilidad',cards:[
+    {q:'¿Te sirve para relacionarte bien con los demás?',r:'Un pensamiento útil mejora tus relaciones.'},
+    {q:'¿Te ayuda a conseguir tus metas u objetivos?',r:'¿Este pensamiento te acerca o te aleja de lo que quieres?'},
+    {q:'¿Te ayuda a ser feliz?',r:'La felicidad también es un criterio válido para evaluar un pensamiento.'},
+    {q:'¿Te sirve para sentir las emociones que quieres?',r:'¿Qué emociones te gustaría sentir en su lugar?'},
+    {q:'¿Te sirve para actuar de la forma que te gustaría?',r:'¿Tu comportamiento bajo este pensamiento es el que deseas?'},
+    {q:'¿Te sirve para tener autocontrol?',r:'Los pensamientos útiles refuerzan, no socavan, el autocontrol.'},
+    {q:'Si no tiene respuesta, ¿tiene sentido darle vueltas?',r:'Rumiar sobre lo incontrolable solo aumenta el sufrimiento.'},
+    {q:'¿Qué pensamiento alternativo me sería de mayor utilidad?',r:'Construye activamente una alternativa más adaptativa.'},
+    {q:'¿Qué pensamiento alternativo me ayudaría a conseguir mis objetivos?',r:'El pensamiento alternativo debe ser realista y funcional.'},
+    {q:'¿Hay algo que yo pueda hacer sobre esto?',r:'Diferencia lo que puedes controlar de lo que no.'},
+    {q:'¿Para qué me sirve pensar de esta forma?',r:'A veces el pensamiento cumple una función que vale identificar.'},
+    {q:'¿Me ayuda quedarme en este pensamiento?',r:'Sé honesto/a contigo mismo/a.'},
+    {q:'¿Cuáles son los pros y los contras de ese pensamiento?',r:'Un análisis equilibrado ayuda a tomar decisiones informadas.'},
+    {q:'¿Te beneficia o te perjudica?',r:'La respuesta suele ser más clara de lo que parece.'}
+  ]},
+  final:{label:'Tarjeta final',type:'final',cards:[
+    {q:'Paso 1 · Identifico el pensamiento',r:'Nombra con claridad el pensamiento que causa malestar.'},
+    {q:'Paso 2 · Pongo a prueba ese pensamiento con los cuatro criterios',r:'Objetividad · Intensidad · Formal · Utilidad. ¿Supera las pruebas?'},
+    {q:'Paso 3 · Si es un pensamiento irracional…',r:'Reconocerlo es el primer gran paso. No te juzgues.'},
+    {q:'Paso 4 · Elijo otra interpretación',r:'Construye una alternativa más realista, flexible y útil.'},
+    {q:'Paso 5 · Practico la interpretación alternativa',r:'La práctica hace permanente. Repite la nueva interpretación hasta que sea automática.'}
+  ]}
+};
+
+const TAGCOL={ansiedad:'#b07d3a',miedo:'#7060a0',tristeza:'#4a7fa5',enfado:'#a03030',culpa:'#7060a0',vergüenza:'#a05c6a',preocupación:'#3d8a7a',frustración:'#b07d3a'};
+
+let emotions=JSON.parse(localStorage.getItem('mc2-emo')||'[]');
+let notes=JSON.parse(localStorage.getItem('mc2-notes')||'{}');
+let cId=null,cType=null,cIdx=0,flipped=false,selTags=[],selInt=5,dirty=false,editingId=null;
+
+(function(){
+  const now=new Date();now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
+  document.getElementById('f-date').value=now.toISOString().slice(0,16);
+  const row=document.getElementById('irow');
+  for(let i=0;i<=10;i++){
+    const b=document.createElement('button');b.className='ib'+(i===5?' on':'');b.textContent=i;
+    b.onclick=()=>{document.querySelectorAll('.ib').forEach(x=>x.classList.remove('on'));b.classList.add('on');selInt=i;};
+    row.appendChild(b);
+  }
+  // Wire form back button
+  document.getElementById('form-back').onclick=()=>{
+    editingId ? go('screen-detail') : go('screen-home');
+  };
+  renderList();
+})();
+
+function renderList(){
+  const el=document.getElementById('elist'),em=document.getElementById('empty');
+  el.innerHTML='';
+  if(!emotions.length){em.style.display='block';return;}
+  em.style.display='none';
+  [...emotions].reverse().forEach(e=>{
+    const d=new Date(e.date);
+    const ds=d.toLocaleDateString('es-ES',{day:'numeric',month:'short'});
+    const ts=d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+    const col=TAGCOL[e.tags[0]]||'#6b8f71';
+    const item=document.createElement('div');item.className='eitem';
+    item.innerHTML=`<div class="epip" style="background:${col}"></div><div class="ebody"><div class="etitle">${e.tags.join(', ')||'Sin etiquetar'}</div><div class="emeta">${ds} · ${ts}${e.place?' · '+e.place:''}</div></div><div class="echev">›</div>`;
+    item.onclick=()=>openDetail(e.id);el.appendChild(item);
+  });
+}
+
+function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+
+function goForm(){
+  editingId=null;
+  selTags=[];selInt=5;
+  document.getElementById('form-title').textContent='Registrar emoción';
+  document.getElementById('form-save-btn').textContent='Guardar y trabajar la emoción';
+  document.querySelectorAll('.tag').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.ib').forEach((b,i)=>b.classList.toggle('on',i===5));
+  ['f-thought','f-fear','f-place','f-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const now=new Date();now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
+  document.getElementById('f-date').value=now.toISOString().slice(0,16);
+  go('screen-form');
+}
+
+function goEditForm(){
+  const e=emotions.find(x=>x.id===cId);if(!e)return;
+  editingId=cId;
+  selTags=[...e.tags];selInt=e.intensity||5;
+  document.getElementById('form-title').textContent='Editar emoción';
+  document.getElementById('form-save-btn').textContent='Guardar cambios';
+  // Fill fields
+  document.getElementById('f-thought').value=e.thought||'';
+  document.getElementById('f-fear').value=e.fear||'';
+  document.getElementById('f-place').value=e.place||'';
+  document.getElementById('f-body').value=e.bodyFeel||'';
+  // Date
+  const d=new Date(e.date);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
+  document.getElementById('f-date').value=d.toISOString().slice(0,16);
+  // Tags
+  document.querySelectorAll('.tag').forEach(b=>{b.classList.toggle('on',selTags.includes(b.dataset.tag));});
+  // Intensity
+  document.querySelectorAll('.ib').forEach((b,i)=>b.classList.toggle('on',i===selInt));
+  go('screen-form');
+}
+
+function toggleTag(btn){btn.classList.toggle('on');const t=btn.dataset.tag;selTags.includes(t)?selTags=selTags.filter(x=>x!==t):selTags.push(t);}
+
+function saveEmotion(){
+  const thought=document.getElementById('f-thought').value.trim();
+  if(!thought){alert('Por favor describe el pensamiento o situación.');return;}
+  if(editingId){
+    // Update existing
+    const idx=emotions.findIndex(x=>x.id===editingId);
+    if(idx>-1){
+      emotions[idx]={...emotions[idx],date:document.getElementById('f-date').value||emotions[idx].date,place:document.getElementById('f-place').value.trim(),tags:[...selTags],thought,fear:document.getElementById('f-fear').value.trim(),bodyFeel:document.getElementById('f-body').value.trim(),intensity:selInt};
+      localStorage.setItem('mc2-emo',JSON.stringify(emotions));
+    }
+    renderList();cId=editingId;editingId=null;openDetail(cId);
+  } else {
+    const e={id:Date.now().toString(),date:document.getElementById('f-date').value||new Date().toISOString(),place:document.getElementById('f-place').value.trim(),tags:[...selTags],thought,fear:document.getElementById('f-fear').value.trim(),bodyFeel:document.getElementById('f-body').value.trim(),intensity:selInt};
+    emotions.push(e);localStorage.setItem('mc2-emo',JSON.stringify(emotions));
+    renderList();openDetail(e.id);
+  }
+}
+
+function openDetail(id){
+  cId=id;const e=emotions.find(x=>x.id===id);if(!e)return;
+  document.getElementById('dhdr').textContent=e.tags[0]||'Emoción';
+  const d=new Date(e.date);
+  const ds=d.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
+  const ts=d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('dband').innerHTML=`<div class="dname">${e.tags.join(' · ')||'Sin etiquetar'}</div><div class="dmeta">${ds} · ${ts}${e.place?' · '+e.place:''}</div><div style="margin-bottom:11px;display:flex;gap:7px;flex-wrap:wrap"><span class="chip">⚡ Intensidad ${e.intensity}/10</span>${e.bodyFeel?`<span class="chip">🫁 ${e.bodyFeel}</span>`:''}</div>${e.thought?`<div class="dthought">${e.thought}</div>`:''}${e.fear?`<div class="dfear">Temía: ${e.fear}</div>`:''}`;
+  go('screen-detail');
+}
+
+function openCards(type){
+  cType=type;cIdx=0;flipped=false;
+  const set=CARDS[type];
+  document.getElementById('chdr').textContent=set.label;
+  document.getElementById('cback').onclick=()=>go('screen-detail');
+  renderCard();go('screen-cards');
+}
+
+function nk(){return`${cId}__${cType}__${cIdx}`;}
+
+function renderCard(){
+  flipped=false;document.getElementById('finn').classList.remove('flipped');
+  const set=CARDS[cType],card=set.cards[cIdx];
+  document.getElementById('clbl').textContent=set.label.toUpperCase();
+  document.getElementById('cq').textContent=card.q;
+  document.getElementById('crefl').textContent=card.r;
+  document.getElementById('cfront').className=`cface f-${set.type}`;
+  const bar=document.getElementById('pbar');bar.innerHTML='';
+  set.cards.forEach((_,i)=>{const d=document.createElement('div');d.className='pseg'+(i<cIdx?' done':i===cIdx?' cur':'');bar.appendChild(d);});
+  document.getElementById('cctr').textContent=`${cIdx+1} / ${set.cards.length}`;
+  document.getElementById('bprev').disabled=cIdx===0;
+  document.getElementById('bnext').disabled=cIdx===set.cards.length-1;
+  const saved=notes[nk()]||'';
+  document.getElementById('nta').value=saved;
+  dirty=false;updateSave(false);
+}
+
+function flipCard(){flipped=!flipped;document.getElementById('finn').classList.toggle('flipped',flipped);}
+function nextCard(){if(cIdx<CARDS[cType].cards.length-1){cIdx++;renderCard();}}
+function prevCard(){if(cIdx>0){cIdx--;renderCard();}}
+
+function onNoteInput(){dirty=true;updateSave(true);}
+function updateSave(d){
+  const btn=document.getElementById('nsave');
+  btn.classList.toggle('saved',!d&&!!notes[nk()]);
+  btn.textContent=d?'Guardar':(notes[nk()]?'Guardado ✓':'Guardar');
+}
+function saveNote(){
+  const v=document.getElementById('nta').value.trim();
+  if(v){notes[nk()]=v;}else{delete notes[nk()];}
+  localStorage.setItem('mc2-notes',JSON.stringify(notes));
+  dirty=false;updateSave(false);
+}
+
+function confirmDelete(){
+  if(confirm('¿Eliminar este registro? Esta acción no se puede deshacer.')){
+    emotions=emotions.filter(e=>e.id!==cId);
+    localStorage.setItem('mc2-emo',JSON.stringify(emotions));
+    Object.keys(notes).forEach(k=>{if(k.startsWith(cId+'__'))delete notes[k];});
+    localStorage.setItem('mc2-notes',JSON.stringify(notes));
+    renderList();go('screen-home');
+  }
+}
+
+function closeOvl(e){if(e.target===document.getElementById('ovl'))document.getElementById('ovl').classList.remove('open');}
+
+let tx=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;});
+document.addEventListener('touchend',e=>{
+  if(!document.getElementById('screen-cards').classList.contains('active'))return;
+  const d=tx-e.changedTouches[0].clientX;
+  if(Math.abs(d)>55){d>0?nextCard():prevCard();}
+});
+</script>
+</body>
+</html>
